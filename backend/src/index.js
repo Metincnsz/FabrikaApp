@@ -48,4 +48,4 @@ const PORT = process.env.PORT || 5000;
 // Sunucu
 app.listen(PORT, () => {
   console.log(`Sunucu ${process.env.NODE_ENV} modunda ${PORT} portunda çalışıyor`);
-}); 
+});

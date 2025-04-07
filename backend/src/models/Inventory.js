@@ -122,4 +122,4 @@ inventorySchema.pre('save', async function(next) {
   }
 });
 
-module.exports = mongoose.model('Inventory', inventorySchema); 
+module.exports = mongoose.model('Inventory', inventorySchema);
