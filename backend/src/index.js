@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 
 // Çevre değişkenlerini yükle
@@ -15,14 +16,19 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true
+}));
+app.use(cookieParser());
 
 // Loglama
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Route tanımlamaları burada gelecek
+// Route tanımlamaları
+app.use('/api/auth', require('./routes/auth'));
 // app.use('/api/users', require('./routes/users'));
 // app.use('/api/products', require('./routes/products'));
 // app.use('/api/productions', require('./routes/productions'));
