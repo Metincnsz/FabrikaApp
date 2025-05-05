@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
+const inventoryRoutes = require('./routes/inventoryRoutes');
 
 // Çevre değişkenlerini yükle
 dotenv.config();
@@ -28,11 +30,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Route tanımlamaları
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', authRoutes);
+app.use('/api/inventory', inventoryRoutes);
 // app.use('/api/users', require('./routes/users'));
 // app.use('/api/products', require('./routes/products'));
 // app.use('/api/productions', require('./routes/productions'));
-// app.use('/api/inventory', require('./routes/inventory'));
 
 // Ana route
 app.get('/', (req, res) => {

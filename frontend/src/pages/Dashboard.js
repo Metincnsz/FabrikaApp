@@ -14,7 +14,8 @@ import {
   Avatar,
   ListItemIcon,
   ListItemText,
-  Divider
+  Divider,
+  Button
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -68,6 +69,13 @@ const Dashboard = () => {
     { icon: <LogoutIcon />, text: 'Çıkış Yap', action: handleLogout }
   ];
 
+  const navigationItems = [
+    { icon: <DashboardIcon />, text: 'Dashboard', path: '/dashboard' },
+    { icon: <InventoryIcon />, text: 'Stok Yönetimi', path: '/inventory' },
+    { icon: <FactoryIcon />, text: 'Üretim', path: '/production' },
+    { icon: <PeopleIcon />, text: 'Kullanıcılar', path: '/users' }
+  ];
+
   const stats = [
     { title: 'Toplam Kullanıcı', value: '24', icon: <PeopleIcon />, color: '#1976d2' },
     { title: 'Aktif Üretim', value: '8', icon: <FactoryIcon />, color: '#2e7d32' },
@@ -99,6 +107,28 @@ const Dashboard = () => {
             Hoş Geldiniz
           </Typography>
           <Typography variant="h6">{user?.name}</Typography>
+        </Box>
+        <Divider sx={{ bgcolor: 'rgba(255,255,255,0.2)' }} />
+        <Box sx={{ mt: 2 }}>
+          {navigationItems.map((item, index) => (
+            <Button
+              key={index}
+              fullWidth
+              startIcon={item.icon}
+              onClick={() => navigate(item.path)}
+              sx={{
+                justifyContent: 'flex-start',
+                px: 3,
+                py: 1.5,
+                color: 'white',
+                '&:hover': {
+                  bgcolor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              {item.text}
+            </Button>
+          ))}
         </Box>
       </Paper>
 

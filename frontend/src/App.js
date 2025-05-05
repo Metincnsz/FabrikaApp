@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Inventory from './pages/Inventory';
 
 const theme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/inventory" element={<Inventory />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
