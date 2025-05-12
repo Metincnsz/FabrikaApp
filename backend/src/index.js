@@ -3,9 +3,12 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const http = require('http');
+const { Server } = require('socket.io');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
+const { setupSocketHandlers } = require('./controllers/socketController');
 
 // Çevre değişkenlerini yükle
 dotenv.config();
@@ -15,6 +18,17 @@ connectDB();
 
 // Express uygulaması
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
+
+// Socket.io controller'ı kur
+setupSocketHandlers(io);
 
 // Middleware
 app.use(express.json());
@@ -54,6 +68,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 // Sunucu
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Sunucu ${process.env.NODE_ENV} modunda ${PORT} portunda çalışıyor`);
+  console.log('WebSocket sunucusu aktif');
 });

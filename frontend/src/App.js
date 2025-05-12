@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Inventory from './pages/Inventory';
+import socketService from './services/socketService';
 
 const theme = createTheme({
   palette: {
@@ -33,6 +34,16 @@ const theme = createTheme({
 });
 
 function App() {
+  useEffect(() => {
+    // WebSocket bağlantısını başlat
+    socketService.connect();
+
+    // Component unmount olduğunda bağlantıyı kapat
+    return () => {
+      socketService.disconnect();
+    };
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

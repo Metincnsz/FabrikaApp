@@ -21,7 +21,8 @@ import {
   Snackbar,
   Grid,
   Card,
-  CardContent
+  CardContent,
+  Divider
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -30,6 +31,8 @@ import {
   Warning as WarningIcon
 } from '@mui/icons-material';
 import axios from 'axios';
+import RealTimeInventory from '../components/RealTimeInventory';
+import socketService from '../services/socketService';
 
 const Inventory = () => {
   const [inventory, setInventory] = useState([]);
@@ -89,11 +92,17 @@ const Inventory = () => {
     e.preventDefault();
     try {
       if (selectedItem) {
-        await axios.put(`http://localhost:5000/api/inventory/${selectedItem._id}`, formData);
+        const response = await axios.put(`http://localhost:5000/api/inventory/${selectedItem._id}`, formData);
         showSnackbar('Stok başarıyla güncellendi');
+        
+        // WebSocket ile güncellenmiş veriyi gönder
+        socketService.emit('inventory_update', response.data);
       } else {
-        await axios.post('http://localhost:5000/api/inventory', formData);
+        const response = await axios.post('http://localhost:5000/api/inventory', formData);
         showSnackbar('Yeni stok başarıyla eklendi');
+        
+        // WebSocket ile yeni veriyi gönder
+        socketService.emit('inventory_update', response.data);
       }
       handleCloseDialog();
       fetchInventory();
@@ -108,6 +117,9 @@ const Inventory = () => {
         await axios.delete(`http://localhost:5000/api/inventory/${id}`);
         showSnackbar('Stok başarıyla silindi');
         fetchInventory();
+        
+        // WebSocket ile silme bilgisini gönder
+        socketService.emit('inventory_update', { id, deleted: true });
       } catch (error) {
         showSnackbar('Silme işlemi sırasında bir hata oluştu', 'error');
       }
@@ -219,6 +231,17 @@ const Inventory = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+          </Paper>
+        </Grid>
+        
+        {/* Gerçek Zamanlı Stok Takibi */}
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, mt: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Gerçek Zamanlı Stok Aktivitesi
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <RealTimeInventory initialItems={inventory} />
           </Paper>
         </Grid>
       </Grid>
