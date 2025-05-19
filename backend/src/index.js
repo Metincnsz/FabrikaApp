@@ -8,6 +8,7 @@ const { Server } = require('socket.io');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 const { setupSocketHandlers } = require('./controllers/socketController');
 
 // Çevre değişkenlerini yükle
@@ -46,6 +47,7 @@ if (process.env.NODE_ENV === 'development') {
 // Route tanımlamaları
 app.use('/api/auth', authRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/reports', reportRoutes);
 // app.use('/api/users', require('./routes/users'));
 // app.use('/api/products', require('./routes/products'));
 // app.use('/api/productions', require('./routes/productions'));
